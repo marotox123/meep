@@ -23,18 +23,18 @@ make clean
 ## Użycie
 
 ```sh
-./meep <szukany_tekst> <plik>
+./meep [-n|-c] <szukany_tekst> <plik>
 ```
 
-Przykład:
+Przykłady:
 
 ```sh
-./meep haha haha.txt
+./meep haha haha.txt        # wypisz pasujące linie
+./meep -n haha haha.txt     # wypisz pasujące linie z numerem linii
+./meep -c haha haha.txt     # wypisz tylko liczbę dopasowań
 ```
 
-Program wypisze wszystkie linie z pliku zawierające podany fragment tekstu.
-
-> Flagi `-n` (numery linii) i `-c` (liczba dopasowań) są rozpoznawane, ale ich logika nie jest jeszcze zaimplementowana — obecnie tylko wypisują komunikat i kończą działanie.
+Domyślnie program wypisuje wszystkie linie z pliku zawierające podany fragment tekstu. Flaga `-n` dodaje numer linii przed każdym dopasowaniem (`3: hello again`), a `-c` zamiast linii wypisuje samą liczbę trafień.
 
 ## Algorytm wyszukiwania — C4
 
@@ -110,7 +110,7 @@ flowchart TD
     end
 
     subgraph READ["Wczytanie danych"]
-        B["mainparser.c<br/>wczytanie pliku do bufora"]
+        B["mainparser.c: handle_file<br/>wczytanie pliku do bufora"]
     end
 
     subgraph PARSE["Parsowanie"]
@@ -122,15 +122,21 @@ flowchart TD
         E["match.c<br/>Match / MatchList"]
     end
 
-    subgraph OUT["Wyjście"]
-        F["wypisanie dopasowanych linii"]
+    subgraph OUT["Wyjście — mainparser.c: handle_output"]
+        F{"jaka flaga?"}
+        F1["domyślnie<br/>wypisz linię"]
+        F2["-n<br/>wypisz numer + linię"]
+        F3["-c<br/>wypisz liczbę dopasowań"]
         G["match_list_free<br/>zwolnienie pamięci"]
     end
 
     A --> B --> C --> D
     D -- tak --> E
     D -- nie --> C
-    E --> F --> G
+    E --> F
+    F -- brak --> F1 --> G
+    F -- "-n" --> F2 --> G
+    F -- "-c" --> F3 --> G
 
     classDef input fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px;
     classDef parse fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px;
@@ -140,7 +146,7 @@ flowchart TD
     class A input;
     class B,C,D parse;
     class E store;
-    class F,G output;
+    class F,F1,F2,F3,G output;
 ```
 
 ## Struktura plików
