@@ -5,7 +5,19 @@ Proste narzędzie CLI w C do wyszukiwania fragmentu tekstu w pliku, linia po lin
 ## Build
 
 ```sh
+make
+```
+
+Ewentualnie ręcznie, bez Makefile:
+
+```sh
 gcc main.c mainparser.c tekstparser.c match.c -o meep
+```
+
+Sprzątanie plików wynikowych (`meep`, `*.o`):
+
+```sh
+make clean
 ```
 
 ## Użycie

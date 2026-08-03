@@ -1,4 +1,4 @@
 meep
-meep.dSYM/
 *.o
 *.dSYM/
+.DS_Store
