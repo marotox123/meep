@@ -24,6 +24,17 @@ Program wypisze wszystkie linie z pliku zawierające podany fragment tekstu.
 
 > Flagi `-n` (numery linii) i `-c` (liczba dopasowań) są rozpoznawane, ale ich logika nie jest jeszcze zaimplementowana — obecnie tylko wypisują komunikat i kończą działanie.
 
+## Algorytm wyszukiwania — C4
+
+> Dopasowywanie tekstu w linii (funkcja `lineparser` w [tekstparser.c](tekstparser.c)) działa według własnego algorytmu nazwanego **C4**:
+>
+> 1. **Punkt startowy** — wskaźnik `ptr` przesuwa się po kolei przez każdy znak linii (od `start` do `end`).
+> 2. **Próba dopasowania** — dla każdej pozycji `ptr` uruchamiany jest drugi wskaźnik `p2` (kopia `ptr`), który porównuje znak po znaku (`*p2 == tekst[j]`), idąc równolegle z indeksem `j` po szukanym tekście.
+> 3. **Licznik trafień** — `k` zlicza kolejne dopasowane znaki. Jeśli `k` osiągnie długość szukanego tekstu, mamy pełne dopasowanie i funkcja zwraca `0`.
+> 4. **Brak dopasowania** — jeśli porównanie się przerwie wcześniej, `ptr` przesuwa się o jeden znak w prawo i cała próba zaczyna się od nowa z nowego punktu startowego.
+>
+> To naiwne (brute-force) dopasowywanie wzorca — bez tablic prefiksów czy przeskoków jak w KMP lub Boyer-Moore — więc złożoność czasowa wynosi `O(n * m)` (n = długość linii, m = długość szukanego tekstu). Prostota kosztem wydajności na dużych plikach.
+
 ## Jak to działa
 
 ```mermaid
