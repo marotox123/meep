@@ -36,6 +36,8 @@ Przykłady:
 
 Domyślnie program wypisuje wszystkie linie z pliku zawierające podany fragment tekstu. Flaga `-n` dodaje numer linii przed każdym dopasowaniem (`3: hello again`), a `-c` zamiast linii wypisuje samą liczbę trafień.
 
+Niepoprawna liczba argumentów lub nierozpoznana flaga (walidowana w `Flagparser` w [main.c](main.c)) kończy program komunikatem `meep: Niepoprawna skladnia` i kodem wyjścia `1`.
+
 ## Algorytm wyszukiwania — C4
 
 Dopasowywanie tekstu w linii (`lineparser` w [tekstparser.c](tekstparser.c)) to własny, naiwny (brute-force) algorytm nazwany **C4** — bez tablic prefiksów i przeskoków jak w KMP czy Boyer-Moore, stąd złożoność `O(n * m)`.
